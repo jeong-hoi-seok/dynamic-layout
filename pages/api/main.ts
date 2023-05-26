@@ -7,7 +7,12 @@ const main = (req: NextApiRequest, res: NextApiResponse) => {
       throw 'method error';
     }
 
-    res.status(200).json({ name: 'John Doe' });
+    const components = [
+      'List',
+      'Banner',
+    ]
+
+    res.status(200).json({ components});
     
   } catch (error) {
     res.status(400);
