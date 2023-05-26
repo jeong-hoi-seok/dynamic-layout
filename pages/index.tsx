@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NextPage, GetServerSideProps } from 'next'
 import axios from 'axios';
+import useCreateComponents from '@/components/hooks/useCreateComponents';
 
-const createComponents = async (c: string[]) => {
-	const ar = [];
-	for (const it of c)
-	{
-		const { default: res } = await import('@/components/' + it);
-		ar.push({name: it, component: res});
-	}
-	return ar;
+interface IComponents {
+	name: string;
+	component: React.FC;
 }
 
 interface IHome {
 	components: string[];
 }
 
+
 const Index: NextPage<IHome> = (props) => {
 	const  {
-		components
+		components,
 	} = props;
-	//state
-	const [com, setCom] = useState<any>(null);
-
-	useEffect(() => {
-		createComponents(components) 
-		.then((res) => {
-			setCom(res)
-		})
-
-	}, []);
+	//hooks
+	const { el } = useCreateComponents(components);
 
 	return (
 		<main>
 		{
-			com && 
-			com.map((d: {name: string, component: React.FC},i: number) => {
+			el && 
+			el.map((d: IComponents,i: number) => {
 				const Com = d.component;
 				return <Com key={i}/>
 			})
@@ -51,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 		return { 
 			props: {
-				components: arr
+				components: arr,
 			}
 		};
 	} catch (error) {

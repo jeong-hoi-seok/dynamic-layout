@@ -8,8 +8,8 @@ const main = (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const components = [
-      'List',
       'Banner',
+      'List',
     ]
 
     res.status(200).json({ components});
